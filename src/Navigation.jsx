@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FaBars, FaTimes, FaHome, FaImages, FaTag, FaCalendarCheck } from 'react-icons/fa';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuHeight, setMenuHeight] = useState(0)
-  const menuRef = useRef(null)
+  const [menuHeight, setMenuHeight] = useState(0);
+  const menuRef = useRef(null);
+  const navRef = useRef(null);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -17,7 +18,30 @@ const Navigation = () => {
     } else {
       setMenuHeight(0);
     }
-  }, [isOpen])
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navItems.map(item => document.getElementById(item.id));
+      const scrollPosition = window.scrollY + 100;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { id: 'home', name: 'Home', icon: FaHome },
@@ -27,61 +51,71 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-gray-800 text-white">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50" ref={navRef}>
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between">
-          <div className="flex items-center py-4">
-            <span className="font-semibold text-lg">
-              <img
-                src="/GabrielCarCleaning.webp"
-                alt="GCC Logo"
-                className='w-10'
-              />
-            </span>
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <img
+              src="/GabrielCarCleaning.webp"
+              alt="GCC Logo"
+              className="w-16 h-12 object-contain"
+            />
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button onClick={toggleMenu} className="text-white focus:outline-none">
+          <div className="md:hidden">
+            <button
+              onClick={toggleMenu}
+              className="text-emerald-700 p-2 rounded-md"
+              aria-expanded={isOpen}
+              aria-label="Toggle menu"
+            >
               {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
           </div>
 
-          {/* Desktop menu */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="py-4 px-2 hover:bg-gray-700 flex items-center"
+                className='py-2 px-3 rounded-md transition duration-300 ease-in-out flex items-center'
               >
-                <item.icon className="mr-2" />
-                {item.name}
+                <item.icon className="mr-2 text-emerald-800" />
+                <span className='text-emerald-800 font-semibold'>
+                  {item.name}
+                </span>
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div
         ref={menuRef}
         style={{
           maxHeight: `${menuHeight}px`,
           overflow: 'hidden',
-          transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1',
+          transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease',
+          opacity: isOpen ? 1 : 0,
         }}
-        className="md:hidden"
+        className="md:hidden bg-white"
       >
-        {navItems.map((item) => (
+        {navItems.map((item, index) => (
           <a
             key={item.id}
             href={`#${item.id}`}
-            className="block py-2 px-4 text-sm hover:bg-gray-700 flex items-center"
+            className='block py-3 px-4 text-base font-medium hover:bg-emerald-800/[.1] hover:text-emerald-800 flex items-center transition duration-300 ease-in-out'
             onClick={toggleMenu}
+            style={{
+              transitionDelay: `${index * 50}ms`,
+              transform: isOpen ? 'translateY(0)' : 'translateY(-10px)',
+              opacity: isOpen ? 1 : 0,
+            }}
           >
-            <item.icon className="mr-2" />
-            {item.name}
+            <item.icon className="mr-3 text-emerald-800" />
+            <span className='text-emerald-800 font-semibold'>
+              {item.name}
+            </span>
           </a>
         ))}
       </div>
