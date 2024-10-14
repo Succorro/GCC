@@ -4,10 +4,6 @@ main = "src/index.js"
 compatibility_date = "2024-10-11"
 compatibility_flags = ["nodejs_compat"]
 
-[
-  env.production
-]
-
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
