@@ -5,7 +5,12 @@ module.exports = {
     "./src/**/*.jsx",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Veranda: ["Veranda", "sans-serif"],
+        Roboto: ["Roboto", "sans-serif"],
+      }
+    },
   },
   plugins: [],
 }

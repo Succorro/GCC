@@ -17,7 +17,7 @@ export const App = () => (
         </PageWithHeader>
       }
     >
-      <div className="h-full w-[100vw] overflow-none bg-indigo-50">
+      <div className="h-full w-[100vw] overflow-none bg-indigo-50 tracking-wide">
         <Navigation />
         <Router />
       </div>
