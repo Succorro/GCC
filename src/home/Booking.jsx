@@ -20,9 +20,9 @@ const Booking = () => {
     setFirstSection(!firstSection)
   }
   return (
-    <section id="book-now" className="py-10 bg-white">
+    <section id="book-now" className="py-10">
       <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-emerald-800 mb-8 text-center">Book Your Appointment</h2>
+        <h2 className="text-3xl font-bold text-emerald-700 mb-8 text-center">Book Your Appointment</h2>
         <div className="p-6">
           <form className=" flex flex-row">
             <section
@@ -30,9 +30,10 @@ const Booking = () => {
               className='space-y-6'
               style={{
                 width: firstSection ? '100%' : '0%',
+                paddingLeft: firstSection ? '10px' : '0',
                 opacity: firstSection ? 1 : 0,
                 transform: firstSection ? 'translateX(-20px)' : 'translateX(0)',
-                transition: ['width 0.5s cubic-bezier(0.4, 0, 0.2, 1)', 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)', 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)']
+                transition: ['padding 0.5s cubic-bezier(0.4, 0, 0.2, 1)', 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)', 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)', 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)']
               }}
             >
               <div>

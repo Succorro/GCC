@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero = () => {
   return (
-    <section id="home" className="pb-20 ">
+    <section id="home" className="pb-20 pt-5">
       <div className="max-w-6xl mx-auto">
         <h3 className="text-4xl font-bold font-Veranda text-emerald-800 mb-6 text-center leading-normal">With Every Detail Customer Satisfaction is Our Aim</h3>
         <div className="grid md:grid-cols-2 gap-8">

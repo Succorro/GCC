@@ -51,14 +51,14 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-indigo-50 fixed top-0 left-0 right-0 z-50" ref={navRef}>
-      <div className="max-w-6xl mx-auto px-4">
+    <nav className="bg-indigo-50 fixed top-0 left-0 right-0 z-50 pb-2" ref={navRef}>
+      <div className="max-w-6xl mx-auto px-2">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
+          <div className="flex items-center w-20 h-20">
             <img
-              src="/GabrielCarCleaning.webp"
+              src="/GCCLogoBg.webp"
               alt="GCC Logo"
-              className="w-16 h-12 object-contain"
+              className="w-full h-full object-contain scale-150 pt-2"
             />
           </div>
 
