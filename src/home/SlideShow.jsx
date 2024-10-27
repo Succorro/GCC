@@ -23,7 +23,7 @@ const Slideshow = () => {
   };
 
   return (
-    <section id="gallery" className="">
+    <section className="">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold text-emerald-700 mb-8 text-center">Our Work</h2>
         <div className="max-w-3xl mx-auto">

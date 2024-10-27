@@ -14,7 +14,7 @@ const Hero = () => {
             </p>
           </div>
           <div className='flex justify-center'>
-            <a href="/#book-now">
+            <a href="/#over-booking">
               <button className='bg-emerald-700 hover:bg-emerald-800 py-3 px-6 rounded-3xl text-white font-bold'>Book Now</button>
             </a>
           </div>
@@ -37,6 +37,7 @@ const Hero = () => {
           </p>
         </div>
       </div>
+      <br id="gallery" />
     </section>
   );
 };

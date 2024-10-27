@@ -45,9 +45,9 @@ const Navigation = () => {
 
   const navItems = [
     { id: 'home', name: 'Home', icon: FaHome },
-    { id: 'gallery', name: 'Gallery', icon: FaImages },
+    { id: 'gallery', name: 'Photos', icon: FaImages },
     { id: 'pricing', name: 'Pricing', icon: FaTag },
-    { id: 'book-now', name: 'Book Now', icon: FaCalendarCheck },
+    { id: 'over-booking', name: 'Book Now', icon: FaCalendarCheck },
   ];
 
   return (
@@ -93,18 +93,18 @@ const Navigation = () => {
       <div
         ref={menuRef}
         style={{
-          maxHeight: `${menuHeight}px`,
+          maxHeight: `${menuHeight + 10}px`,
           overflow: 'hidden',
           transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease',
           opacity: isOpen ? 1 : 0,
         }}
-        className="md:hidden bg-white"
+        className="md:hidden bg-indigo-50 shadow-md"
       >
         {navItems.map((item, index) => (
           <a
             key={item.id}
             href={`#${item.id}`}
-            className='block py-3 px-4 text-base font-medium hover:bg-emerald-800/[.1] hover:text-emerald-800 flex items-center transition duration-300 ease-in-out'
+            className='block py-4 px-4 text-base font-medium hover:bg-emerald-800/[.1] hover:text-emerald-800 flex items-center transition duration-300 ease-in-out'
             onClick={toggleMenu}
             style={{
               transitionDelay: `${index * 50}ms`,

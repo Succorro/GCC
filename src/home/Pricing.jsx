@@ -4,7 +4,7 @@ import { SiVenmo } from 'react-icons/si';
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="py-20">
+    <section id="pricing" className="pt-20 pb-10">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-semibold text-emerald-700 mb-8 text-center">Pricing</h2>
         <div className="grid md:grid-cols-2 gap-8">
@@ -47,7 +47,7 @@ const Pricing = () => {
           </p>
         </div>
       </div>
-
+      <br id='over-booking' />
     </section>
   );
 };
