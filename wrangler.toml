@@ -5,3 +5,15 @@ compatibility_date = "2024-10-13"
 
 [env]
 production = { }
+
+[[kv_namespaces]]
+binding = "APPOINTMENTS"
+id = "3f61567cfe764f1999c8344967b395e4"
+
+[[kv_namespaces]]
+binding = "AVAILABILITY"
+id = "c4334f98a44d42c8b0f57a81b8ed9cdd"
+
+[[kv_namespaces]]
+binding = "SETTINGS"
+id = "6cd3960e607448d3930f8a0dd9105bb2"
