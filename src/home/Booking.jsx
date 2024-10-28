@@ -4,17 +4,39 @@ import { FaArrowLeft } from 'react-icons/fa';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const Booking = () => {
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([])
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     vehicle: '',
-    service: null,
-    date: null,
-    time: null
+    service: '',
+    date: '',
+    time: ''
   });
   const [errors, setErrors] = useState({});
   const [firstSection, setFirstSection] = useState(true);
+
+  // Generate time slots from 9 AM to 5 PM
+  const timeSlots = Array.from({ length: 17 }, (_, i) => {
+    const hour = Math.floor(i / 2) + 9;
+    const minute = i % 2 === 0 ? '00' : '30';
+    return { time: `${hour.toString().padStart(2, '0')}:${minute}`, available: true };
+  });
+
+  const fetchAvailableTimeSlots = async (date) => {
+    if (!date) return;
+    console.log(date)
+    try {
+      //Uncomment when time data is live 
+      // const formattedDate = date.toISOString().split('T')[0];
+      // const response = await fetch(`/api/availability/get?date=${formattedDate}`);
+      // const slots = await response.json();
+      setAvailableTimeSlots(timeSlots);
+    } catch (error) {
+      console.error('Failed to fetch time slots:', error)
+    }
+  };
 
   const validateSection1 = () => {
     const newErrors = {};
@@ -51,17 +73,11 @@ const Booking = () => {
 
   const handleDateChange = (date) => {
     setFormData(prev => ({ ...prev, date }));
+    fetchAvailableTimeSlots(date);
     if (errors.date) {
       setErrors(prev => ({ ...prev, date: null }));
     }
   };
-
-  // const handleTimeChange = (time) => {
-  //   setFormData(prev => ({ ...prev, time }));
-  //   if (errors.time) {
-  //     setErrors(prev => ({ ...prev, time: null }));
-  //   }
-  // };
 
   const handleForwardClick = () => {
     if (validateSection1()) {
@@ -73,21 +89,34 @@ const Booking = () => {
     setFirstSection(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateSection2()) {
-      // Submit the form data
-      console.log('Form submitted:', formData);
-      // Here you would typically send the data to your backend
+      try {
+        const response = await fetch('/api/appointments/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Handle success (e.g., show success message, redirect)
+
+          console.log('Appointment created:', result.appointmentId);
+        } else {
+          // Handle error
+          setErrors(prev => ({ ...prev, submit: result.error }));
+        }
+      } catch (error) {
+        console.error('Failed to create appointment:', error);
+        setErrors(prev => ({ ...prev, submit: 'Failed to create appointment' }));
+      }
     }
   };
-
-  // Generate time slots from 9 AM to 5 PM
-  const timeSlots = Array.from({ length: 17 }, (_, i) => {
-    const hour = Math.floor(i / 2) + 9;
-    const minute = i % 2 === 0 ? '00' : '30';
-    return `${hour.toString().padStart(2, '0')}:${minute}`;
-  });
 
   return (
     <section id="book-now" className="mt-20 pb-24 sm:pb-0">
@@ -196,7 +225,6 @@ const Booking = () => {
                 <select
                   id="service"
                   name="service"
-                  required
                   value={formData.service}
                   onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.service ? 'border-red-500' : 'border-gray-300'}`}
@@ -228,8 +256,14 @@ const Booking = () => {
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">Select a time</option>
-                  {timeSlots.map((time) => (
-                    <option key={time} value={time}>{time}</option>
+                  {availableTimeSlots.map((slot) => (
+                    <option
+                      key={slot.time}
+                      value={slot.time}
+                      disabled={!slot.available}
+                    >
+                      {slot.time} {!slot.available ? '(Unavailable)' : ''}
+                    </option>
                   ))}
                 </select>
                 {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
