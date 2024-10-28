@@ -9,7 +9,7 @@ const Booking = () => {
     phone: '',
     email: '',
     vehicle: '',
-    service: '',
+    service: null,
     date: null,
     time: null
   });
@@ -56,12 +56,12 @@ const Booking = () => {
     }
   };
 
-  const handleTimeChange = (time) => {
-    setFormData(prev => ({ ...prev, time }));
-    if (errors.time) {
-      setErrors(prev => ({ ...prev, time: null }));
-    }
-  };
+  // const handleTimeChange = (time) => {
+  //   setFormData(prev => ({ ...prev, time }));
+  //   if (errors.time) {
+  //     setErrors(prev => ({ ...prev, time: null }));
+  //   }
+  // };
 
   const handleForwardClick = () => {
     if (validateSection1()) {

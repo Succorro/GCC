@@ -5,7 +5,7 @@ const Hero = () => {
     <section id="home" className="pb-20 pt-5">
       <div className="max-w-6xl mx-auto">
         <h3 className="text-4xl font-bold font-Veranda text-emerald-800 mb-6 text-center leading-normal">With Every Detail Customer Satisfaction is Our Aim</h3>
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid gap-8">
           <div>
             <p className="text-gray-700 font-bold mb-4 ">
               Gabriel Car Cleaning provides top-notch auto detailing services in the Modesto area.
