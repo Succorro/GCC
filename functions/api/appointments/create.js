@@ -1,5 +1,3 @@
-import { SendGridApi } from '@sendgrid/mail';
-
 export async function onRequest(context) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -7,41 +5,37 @@ export async function onRequest(context) {
     "Access-Control-Allow-Headers": "Content-Type",
   };
 
-  // Handle OPTIONS
   if (context.request.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (context.request.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
-  }
-
   try {
-    const { APPOINTMENTS, AVAILABILITY } = context.env;
-    const body = await context.request.json();
+    const { APPOINTMENTS, AVAILABILITY, SETTINGS, BREVO_API_KEY } = context.env;
     
-    // Generate unique appointment ID
-    const appointmentId = crypto.randomUUID();
-    const timestamp = new Date().toISOString();
-
-    // Format date and time for storage
-    const appointmentDate = new Date(body.date);
-    const timeSlot = body.time;
-    
-    // Check if the time slot is available
-    const availabilityKey = `${appointmentDate.toISOString().split('T')[0]}_${timeSlot}`;
-    const isAvailable = await AVAILABILITY.get(availabilityKey);
-    
-    if (isAvailable === "blocked") {
-      return new Response(JSON.stringify({ 
-        error: "This time slot is no longer available" 
-      }), { 
-        status: 409,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+    if(!BREVO_API_KEY) {
+      throw new Error('BREVO_API_KEY is not configurated correctly!');
     }
 
-    // Store appointment data
+    // Information passed through component
+    const body = await context.request.json();
+
+    // Generate appointment ID and get timestamp
+    const appointmentId = crypto.randomUUID();
+    const timestamp = new Date().toISOString();
+    const appointmentDate = new Date(body.date);
+
+    // Get business configuration
+    const config = JSON.parse(await SETTINGS.get('businessConfig'));
+    
+    // Validate business hours
+    const dayOfWeek = appointmentDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+    const dayConfig = config.businessHours[dayOfWeek];
+    
+    if (!dayConfig.isOpen) {
+      throw new Error('Selected date is not a business day');
+    }
+
+    // Create appointment data
     const appointmentData = {
       id: appointmentId,
       name: body.name,
@@ -49,48 +43,77 @@ export async function onRequest(context) {
       email: body.email,
       vehicle: body.vehicle,
       service: body.service,
+      duration: `${body.service.duration}minutes`,
+      price: body.service.price,
       date: appointmentDate.toISOString(),
-      time: timeSlot,
-      status: "pending",
-      createdAt: timestamp
+      time: body.time,
+      address: body.address,
+      status: "confirmed",
+      createdAt: timestamp,
+      lastUpdated: timestamp
     };
 
-    // Store in KV
+    // Store appointment
     await APPOINTMENTS.put(appointmentId, JSON.stringify(appointmentData));
-    
-    // Mark time slot as taken
-    await AVAILABILITY.put(availabilityKey, "blocked");
 
-    // Send confirmation email if email provided
+    // Block the time slot
+    const timeSlotKey = `${appointmentDate.toISOString().split('T')[0]}_${body.time}`;
+    await AVAILABILITY.put(timeSlotKey, "blocked");
+
+    // Send confirmation email via Brevo
     if (body.email) {
-      const sg = new SendGridApi();
-      sg.setApiKey(context.env.SENDGRID_API_KEY);
-
-      await sg.send({
-        to: body.email,
-        from: 'your-verified-sender@yourdomain.com',
-        subject: 'Appointment Confirmation',
-        text: `Thank you for booking with us! Your appointment is scheduled for ${appointmentDate.toLocaleDateString()} at ${timeSlot}.`,
-        html: `
-          <h2>Appointment Confirmation</h2>
-          <p>Thank you for booking with us!</p>
-          <p>Your appointment details:</p>
-          <ul>
-            <li>Date: ${appointmentDate.toLocaleDateString()}</li>
-            <li>Time: ${timeSlot}</li>
-            <li>Service: ${body.service}</li>
-          </ul>
-        `
+      const service = config.services.find(s => s.id === body.service);
+      
+      try {
+        const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'api-key': BREVO_API_KEY,
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            sender: {
+              name: "Gabriel Car Cleaning",
+              email: "quote@gabrielcarcleaning.com"
+            },
+            to: [{
+              email: appointmentData.email,
+              name: appointmentData.name
+            }],
+            subject: "Appointment Confirmation",
+            params: {
+              name: appointmentData.name,
+              status: appointmentData.status,
+              appointment_id: appointmentData.id,
+              date: appointmentData.date,
+              time: appointmentData.time,
+              service: service.name,
+              duration: appointmentData.duration,
+              price: appointmentData.price,
+              address: appointmentData.address
+            },
+            templateId: config.notifications.confirmationTemplateId
+        })
       });
+      
+      const emailResult = await brevoResponse.json();
+  
+      if(!brevoResponse.ok) {
+        console.error('Brevo API error:', emailResult);
+      }
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError);
     }
+  }
 
-    return new Response(JSON.stringify({
-      success: true,
-      appointmentId,
-      message: "Appointment created successfully"
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+  return new Response(JSON.stringify({
+    success: true,
+    appointmentId,
+    message: "Appointment created successfully"
+  }), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" }
+  });
 
   } catch (error) {
     return new Response(JSON.stringify({

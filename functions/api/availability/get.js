@@ -22,7 +22,7 @@ export async function onRequest(context) {
     const businessHours = await SETTINGS.get('businessHours', { type: 'json' }) || {
       start: '09:00',
       end: '17:00',
-      interval: 30
+      interval: 60
     };
 
     // Get blocked times for the date
