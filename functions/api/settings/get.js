@@ -103,10 +103,11 @@ export async function onRequest(context) {
       ...parsedSettings,
       currentStatus: getCurrentStatus()
     };
-
     return new Response(JSON.stringify(responseData), {
+      
       headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
+    
 
   } catch (error) {
     return new Response(JSON.stringify({
