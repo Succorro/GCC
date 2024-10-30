@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 // Configuration
-const ALLOWED_ORIGINS = ['http://localhost:8788', 'https://gabrielcarcleaning.com', 'http://localhost:5173', 'https://gabrielcarcleaning1.pages.dev'];
+const ALLOWED_ORIGINS = ['http://localhost:8788', 'https://domain.com', 'http://localhost:5173', 'https://gabrielcarcleaining1.pages.dev'];
 const MAX_ATTEMPTS = 5;
 const WINDOW_TIME = 15 * 60;  // 15 minutes
 
@@ -75,31 +75,32 @@ export async function onRequestPost(context) {
                     context.request.headers.get('X-Real-IP') || 
                     'unknown';
     
-                    // Check rate limiting
+    // Check rate limiting
     const rateLimitKey = `ratelimit:${clientIP}`;
     const rateLimitData = await AUTH_STORE.get(rateLimitKey, { type: 'json' });
     
-    // if (rateLimitData) {
-    //   const now = Math.floor(Date.now() / 1000);
-    //   if (rateLimitData.count >= MAX_ATTEMPTS && 
-    //       (now - rateLimitData.timestamp) < WINDOW_TIME) {
-    //     const remainingTime = WINDOW_TIME - (now - rateLimitData.timestamp);
-    //     return new Response(
-    //       JSON.stringify({ 
-    //         error: 'Too many login attempts',
-    //         remainingTime 
-    //       }),
-    //       { status: 429, headers }
-    //     );
-    //   }
-    // }
+    if (rateLimitData) {
+      const now = Math.floor(Date.now() / 1000);
+      if (rateLimitData.count >= MAX_ATTEMPTS && 
+          (now - rateLimitData.timestamp) < WINDOW_TIME) {
+        const remainingTime = WINDOW_TIME - (now - rateLimitData.timestamp);
+        return new Response(
+          JSON.stringify({ 
+            error: 'Too many login attempts',
+            remainingTime 
+          }),
+          { status: 429, headers }
+        );
+      }
+    }
 
     // Parse request body
     const body = await context.request.text();
     let credentials;
     try {
-      credentials = JSON.parse(body);
+      credentials = JSON.stringify(body);
     } catch (e) {
+      console.error('Error parsing request body:', e);
       return new Response(
         JSON.stringify({ error: 'Invalid JSON in request body' }),
         { status: 400, headers }
@@ -116,20 +117,20 @@ export async function onRequestPost(context) {
     }
 
     // Fetch stored credentials
-    const [storedUsername, storedPassword, jwtSecret] = await Promise.all([
+    const [storedUsername, storedPasswordHash, jwtSecret] = await Promise.all([
       AUTH_STORE.get('ADMIN_USERNAME'),
       AUTH_STORE.get('HASHED_PASSWORD'),
       AUTH_STORE.get('JWT_SECRET')
     ]);
 
-    if (!storedUsername || !storedPassword || !jwtSecret) {
+    if (!storedUsername || !storedPasswordHash || !jwtSecret) {
       console.error('Missing required credentials in KV store');
       return new Response(
         JSON.stringify({ 
           error: 'Authentication configuration error',
           details: {
             missingUsername: !storedUsername,
-            missingPassword: !storedPassword,
+            missingPassword: !storedPasswordHash,
             missingJWTSecret: !jwtSecret
           }
         }),
@@ -139,17 +140,10 @@ export async function onRequestPost(context) {
 
     // Verify credentials
     const isValidUsername = username === storedUsername;
-    const isValidPassword = await bcrypt.compare(password, storedPassword);
-
-    console.log('Auth check:', {
-      usernameValid: isValidUsername,
-      passwordValid: isValidPassword,
-      attemptedUsername: username
-    });
+    const isValidPassword = await bcrypt.compare(password, storedPasswordHash);
 
     if (!isValidUsername || !isValidPassword) {
       // Handle failed attempt
-      
       await AUTH_STORE.put(rateLimitKey, JSON.stringify({
         count: (rateLimitData?.count || 0) + 1,
         timestamp: Math.floor(Date.now() / 1000)
