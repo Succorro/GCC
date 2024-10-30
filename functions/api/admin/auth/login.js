@@ -95,19 +95,19 @@ export async function onRequestPost(context) {
     }
 
     // Parse request body
-    const body = await context.request.text();
-    let credentials;
-    try {
-      credentials = JSON.stringify(body);
-    } catch (e) {
-      console.error('Error parsing request body:', e);
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers }
-      );
-    }
+    const body = await context.request.json();
+    // let credentials;
+    // try {
+    //   credentials = JSON.stringify(body);
+    // } catch (e) {
+    //   console.error('Error parsing request body:', e);
+    //   return new Response(
+    //     JSON.stringify({ error: 'Invalid JSON in request body' }),
+    //     { status: 400, headers }
+    //   );
+    // }
 
-    const { username, password } = credentials;
+    const { username, password } = body;
 
     if (!username) {
       return new Response(
