@@ -109,9 +109,14 @@ export async function onRequestPost(context) {
 
     const { username, password } = credentials;
 
-    if (!username || !password) {
+    if (!username) {
       return new Response(
-        JSON.stringify({ error: 'Username and password required' }),
+        JSON.stringify({ error: 'Username is required' }),
+        { status: 400, headers }
+      );
+    } else if (!password) {
+      return new Response(
+        JSON.stringify({ error: 'Password is required' }),
         { status: 400, headers }
       );
     }

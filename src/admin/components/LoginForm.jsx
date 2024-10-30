@@ -18,8 +18,14 @@ export const LoginForm = () => {
       const from = location.state?.from?.pathname || "/admin/settings";
       navigate(from, { replace: true });
     } catch (err) {
-      console.log(err)
-      setError('Invalid credentials');
+      console.log("inside error", err)
+      if (err === 'Error: Username is required') {
+        setError('Username is wrong');
+      } else if (err === "Error: Password is required") {
+        setError('Password is wrong')
+      } else {
+        setError('Invalid Credentials')
+      }
     }
   };
 
