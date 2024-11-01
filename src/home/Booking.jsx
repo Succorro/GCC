@@ -3,10 +3,11 @@ import DatePicker from 'react-datepicker';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useSettings } from '../admin/hooks/useSettings';
 import 'react-datepicker/dist/react-datepicker.css';
+import TimeSlotPicker from '../components/TimeSlotPicker';
 
 const Booking = () => {
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-  const { settings, loading, error } = useSettings();
+  const { settings, loading, error, fetchSettings } = useSettings();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -152,6 +153,12 @@ const Booking = () => {
       setErrors(prev => ({ ...prev, [name]: null }));
     }
   };
+  const handleTimeChange = (selectedTime) => {
+    setFormData(prev => ({ ...prev, [time]: selectedTime }));
+    if (errors[time]) {
+      setErrors(prev => ({ ...prev, [time]: null }))
+    }
+  }
 
   const handleDateChange = (date) => {
     setFormData(prev => ({ ...prev, date, time: '' }));
@@ -292,7 +299,7 @@ const Booking = () => {
                   onClick={handleBackwardClick}
                   className="text-black"
                 >
-                  <FaArrowLeft />
+                  <FaArrowLeft size={lg} />
                 </button>
               </div>
               <div>
@@ -340,24 +347,25 @@ const Booking = () => {
               </div>
               <div>
                 <label htmlFor="time" className="block text-md font-semibold text-emerald-800 mb-2">Time</label>
-                <select
+                {/* <select
                   id="time"
                   name="time"
                   value={formData.time}
                   onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
                 >
-                  <option value="">Select a time</option>
-                  {availableTimeSlots.map((slot) => (
-                    <option
-                      key={slot.time}
-                      value={slot.time}
-                      disabled={!slot.available}
-                    >
-                      {slot.time} {!slot.available ? '(Unavailable)' : ''}
-                    </option>
-                  ))}
-                </select>
+                  <option value="">Select a time</option> */}
+                {availableTimeSlots.map((slot) => (
+                  // <option
+                  //   key={slot.time}
+                  //   value={slot.time}
+                  //   disabled={!slot.available}
+                  // >
+                  //   {slot.time} {!slot.available ? '(Unavailable)' : ''}
+                  // </option>
+                  <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} />
+                ))}
+                {/* </select> */}
                 {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
                 {formData.date && availableTimeSlots.length === 0 && (
                   <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
