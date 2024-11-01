@@ -299,7 +299,7 @@ const Booking = () => {
                   onClick={handleBackwardClick}
                   className="text-black"
                 >
-                  <FaArrowLeft size={'lg'} />
+                  <FaArrowLeft />
                 </button>
               </div>
               <div>
@@ -345,9 +345,10 @@ const Booking = () => {
                 />
                 {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
               </div>
-              <div>
-                <label htmlFor="time" className="block text-md font-semibold text-emerald-800 mb-2">Time</label>
-                {/* <select
+              {formData.date &&
+                <div>
+                  <label htmlFor="time" className="block text-md font-semibold text-emerald-800 mb-2">Time</label>
+                  {/* <select
                   id="time"
                   name="time"
                   value={formData.time}
@@ -355,22 +356,23 @@ const Booking = () => {
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">Select a time</option> */}
-                {availableTimeSlots.map((slot) => (
-                  // <option
-                  //   key={slot.time}
-                  //   value={slot.time}
-                  //   disabled={!slot.available}
-                  // >
-                  //   {slot.time} {!slot.available ? '(Unavailable)' : ''}
-                  // </option>
-                  <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} selectedTime={formData.time} />
-                ))}
-                {/* </select> */}
-                {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
-                {formData.date && availableTimeSlots.length === 0 && (
-                  <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
-                )}
-              </div>
+                  {availableTimeSlots.map((slot) => (
+                    // <option
+                    //   key={slot.time}
+                    //   value={slot.time}
+                    //   disabled={!slot.available}
+                    // >
+                    //   {slot.time} {!slot.available ? '(Unavailable)' : ''}
+                    // </option>
+                    <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} selectedTime={formData.time} />
+                  ))}
+                  {/* </select> */}
+                  {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                  {formData.date && availableTimeSlots.length === 0 && (
+                    <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
+                  )}
+                </div>
+              }
               <div>
                 <button type="submit" className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition duration-300">
                   Book Appointment
