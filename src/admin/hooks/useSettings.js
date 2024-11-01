@@ -71,5 +71,5 @@ export const useSettings = () => {
     fetchSettings();
   }, []);
 
-  return { settings, loading, error, updateSettings };
+  return { settings, loading, error, updateSettings, configureSettings, updateSettings };
 };
