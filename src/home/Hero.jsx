@@ -12,7 +12,6 @@ const Hero = () => {
               With our expertise and state-of-the-art equipment, we ensure your vehicle
               looks its best.
             </p>
-            <button onClick={handleClick} className='bg-emerald-700 hover:bg-emerald-800 py-3 px-6 rounded-3xl text-white font-bold'>Initialize settings</button>
           </div>
           <div className='flex justify-center'>
             <a href="/#over-booking">
