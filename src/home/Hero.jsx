@@ -3,6 +3,15 @@ import { useSettings } from '../admin/hooks/useSettings';
 
 const Hero = () => {
   const { configureSettings } = useSettings();
+
+  const handleClick = async () => {
+    try {
+      await configureSettings();
+      console.log('Settings configured successfully');
+    } catch (error) {
+      console.log('Error configuring settings:', error);
+    }
+  };
   return (
     <section id="home" className="pb-20 pt-5">
       <div className="max-w-6xl mx-auto">
@@ -14,13 +23,7 @@ const Hero = () => {
               With our expertise and state-of-the-art equipment, we ensure your vehicle
               looks its best.
             </p>
-            <button onClick={async () => {
-              try {
-                await configureSettings();
-              } catch (error) {
-                console.log(error)
-              }
-            }} className='bg-emerald-700 hover:bg-emerald-800 py-3 px-6 rounded-3xl text-white font-bold'>Initialize settings</button>
+            <button onClick={handleClick} className='bg-emerald-700 hover:bg-emerald-800 py-3 px-6 rounded-3xl text-white font-bold'>Initialize settings</button>
           </div>
           <div className='flex justify-center'>
             <a href="/#over-booking">
