@@ -5,6 +5,7 @@ const TimeSlotPicker = ({ onTimeSelect, selectedTime, time, available }) => {
 
   return (
     <button
+      type="button"
       key={time}
       onClick={() => handleTimeClick(time)}
       disabled={!available}
@@ -15,12 +16,12 @@ const TimeSlotPicker = ({ onTimeSelect, selectedTime, time, available }) => {
             font-medium 
             transition-colors 
             ${selectedTime === time
-          ? 'bg-blue-600 text-white hover:bg-blue-700'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          ? 'bg-green-600 text-white hover:bg-green-700'
+          : 'bg-gray-50 text-gray-700 hover:bg-gray-200'
         }
             focus:outline-none 
             focus:ring-2 
-            focus:ring-blue-500 
+            focus:ring-green-500 
             focus:ring-offset-2
           `}
     >
