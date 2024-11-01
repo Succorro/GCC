@@ -202,6 +202,7 @@ const Booking = () => {
   }
 
   if (error) {
+    console.log(error)
     return <div className="text-center py-8 text-red-500">Error loading booking settings. Please try again later.</div>;
   }
 

@@ -31,7 +31,7 @@ export async function onRequest(context) {
     // Function to get current business status
     const getCurrentStatus = () => {
       const now = new Date();
-      const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'lowercase' });
+      const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
       const currentTime = now.toLocaleTimeString('en-US', { 
         hour12: false, 
         hour: '2-digit', 
