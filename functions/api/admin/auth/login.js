@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 // Configuration
-const ALLOWED_ORIGINS = ['http://localhost:8788', 'https://domain.com', 'http://localhost:5173', 'https://gabrielcarcleaining1.pages.dev'];
+const ALLOWED_ORIGINS = ['https://gabrielcarcleaning.com', 'https://gabrielcarcleaining1.pages.dev'];
 const MAX_ATTEMPTS = 5;
 const WINDOW_TIME = 15 * 60;  // 15 minutes
 

@@ -1,6 +1,6 @@
 export const onRequest = async (context) => {
   const origin = context.request.headers.get('Origin') || '';
-  const ALLOWED_ORIGINS = ['http://localhost:8788', 'https://gabrielcarcleaning.com', 'http://localhost:5173'];
+  const ALLOWED_ORIGINS = ['https://gabrielcarcleaning.com', 'https://gabrielcarcleaining1.pages.dev'];
   
   // CORS and security headers
   const headers = {

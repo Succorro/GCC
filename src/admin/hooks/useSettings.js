@@ -5,9 +5,27 @@ export const useSettings = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const configureSettings = async () => {
+    try {
+      const response = await fetch('/api/admin/configure');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch settings');
+      }
+      
+      const data = await response.json();
+      setSettings(data.settings);
+      return data;
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const fetchSettings = async () => {
     try {
-      const response = await fetch('/api/admin/settings/get');
+      const response = await fetch('/api/settings/get');
       
       if (!response.ok) {
         if (response.status === 404) {
@@ -29,7 +47,7 @@ export const useSettings = () => {
 
   const updateSettings = async (newSettings) => {
     try {
-      const response = await fetch('/api/admin/settings/update', {
+      const response = await fetch('/api/settings/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,23 +68,6 @@ export const useSettings = () => {
     }
   };
 
-  const configureSettings = async () => {
-    try {
-      const response = await fetch('/api/admin/configure');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch settings');
-      }
-      
-      const data = await response.json();
-      setSettings(data.settings);
-      return data;
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
   useEffect(() => {
     fetchSettings();
   }, []);

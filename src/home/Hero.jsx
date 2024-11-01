@@ -1,17 +1,6 @@
 import React from 'react';
-import { useSettings } from '../admin/hooks/useSettings';
 
 const Hero = () => {
-  const { configureSettings } = useSettings();
-
-  const handleClick = async () => {
-    try {
-      await configureSettings();
-      console.log('Settings configured successfully');
-    } catch (error) {
-      console.log('Error configuring settings:', error);
-    }
-  };
   return (
     <section id="home" className="pb-20 pt-5">
       <div className="max-w-6xl mx-auto">
