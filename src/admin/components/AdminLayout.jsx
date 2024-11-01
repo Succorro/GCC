@@ -1,9 +1,11 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
+import { SettingsForm } from './SettingsForm';
 
-export const AdminLayout = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+export const AdminLayout = () => {
+  const { isAuthenticated, loading, user } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -14,9 +16,9 @@ export const AdminLayout = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  // }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -24,15 +26,16 @@ export const AdminLayout = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
+              <div className="flex-shrink-0 flex flex-col items-start mt-1">
                 <h1 className="text-xl font-bold">Admin Dashboard</h1>
+                <h1 className="text-xl ">Welcome {user}</h1>
               </div>
             </div>
           </div>
         </div>
       </nav>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {children}
+        <SettingsForm />
       </main>
     </div>
   );

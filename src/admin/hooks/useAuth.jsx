@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (username, password) => {
     try {
-      // Use /api prefix for Pages Functions
       const response = await fetch(`${API_BASE_URL}/api/admin/auth/login`, {
         method: 'POST',
         headers: {
@@ -57,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       return data;
     } catch (error) {
       console.error('Login error:', error);
-      // Add more specific error handling
       if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
         throw new Error('Unable to connect to the server. Please check your internet connection.');
       }
@@ -67,7 +65,6 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      // Optionally call logout endpoint to invalidate token on server
       await fetch(`${API_BASE_URL}/api/admin/auth/logout`, {
         method: 'POST',
         headers: getAuthHeaders(),

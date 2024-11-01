@@ -52,14 +52,14 @@ export async function onRequest(context) {
           isOpen: true 
         }
       },
-      appointmentDuration: 30, // minutes
-      bufferTime: 0, // removed buffer time as requested
+      appointmentDuration: 30,
+      bufferTime: 0,
       services: [
         { id: 'single', name: 'Single Headlight', duration: 30, price: 30 },
         { id: 'double', name: 'Full Headlight', duration: 60, price: 60 }
       ],
       notifications: {
-        confirmationTemplateId: 2, // Using template 2 as specified
+        confirmationTemplateId: 2,
         senderEmail: "quote@gabrielcarcleaning.com",
         senderName: "Gabriel Car Cleaning"
       }
@@ -69,7 +69,8 @@ export async function onRequest(context) {
 
     return new Response(JSON.stringify({
       success: true,
-      message: "Initial configuration completed"
+      message: "Initial configuration completed",
+      settings: defaultSettings
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" }
     });

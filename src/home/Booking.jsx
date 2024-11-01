@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useSettings } from '../admin/hooks/useSettings';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const Booking = () => {
-  const [availableTimeSlots, setAvailableTimeSlots] = useState([])
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+  const { settings, loading, error } = useSettings();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,27 +18,108 @@ const Booking = () => {
   });
   const [errors, setErrors] = useState({});
   const [firstSection, setFirstSection] = useState(true);
+  const [selectedService, setSelectedService] = useState(null);
 
-  // Generate time slots from 9 AM to 5 PM
-  const timeSlots = Array.from({ length: 17 }, (_, i) => {
-    const hour = Math.floor(i / 2) + 9;
-    const minute = i % 2 === 0 ? '00' : '30';
-    return { time: `${hour.toString().padStart(2, '0')}:${minute}`, available: true };
-  });
+  const getDayName = (date) => {
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return days[date.getDay()];
+  };
+
+  // Create time slots based on settings
+  const generateTimeSlots = (daySchedule, selectedDate) => {
+    if (!daySchedule.isOpen) return [];
+
+    const slots = [];
+    const addTimeSlots = (startTime, endTime) => {
+      const [startHour, startMinute] = startTime.split(':').map(Number);
+      const [endHour, endMinute] = endTime.split(':').map(Number);
+
+      let currentHour = startHour;
+      let currentMinute = startMinute;
+
+      while (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute)) {
+        // Check if there's enough time before the end for the service duration
+        const slotTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+        const slotEndTime = new Date(selectedDate);
+        slotEndTime.setHours(currentHour);
+        slotEndTime.setMinutes(currentMinute + (selectedService?.duration || settings.appointmentDuration));
+
+        const endTimeDate = new Date(selectedDate);
+        const [endTimeHour, endTimeMinute] = endTime.split(':').map(Number);
+        endTimeDate.setHours(endTimeHour);
+        endTimeDate.setMinutes(endTimeMinute);
+
+        if (slotEndTime <= endTimeDate) {
+          slots.push({
+            time: slotTime,
+            available: true
+          });
+        }
+
+        currentMinute += settings.appointmentDuration + settings.bufferTime;
+        if (currentMinute >= 60) {
+          currentHour += Math.floor(currentMinute / 60);
+          currentMinute = currentMinute % 60;
+        }
+      }
+    };
+
+    // Add slots for first period
+    if (daySchedule.start && daySchedule.end) {
+      addTimeSlots(daySchedule.start, daySchedule.end);
+    }
+
+    // Add slots for second period if it exists
+    if (daySchedule.secondStart && daySchedule.secondEnd) {
+      addTimeSlots(daySchedule.secondStart, daySchedule.secondEnd);
+    }
+
+    return slots;
+  };
+
+  useEffect(() => {
+    if (formData.date && settings?.businessHours) {
+      const dayName = getDayName(formData.date);
+      const daySchedule = settings.businessHours[dayName];
+      const slots = generateTimeSlots(daySchedule, formData.date);
+      setAvailableTimeSlots(slots);
+    }
+  }, [formData.date, selectedService, settings]);
+
+  useEffect(() => {
+    if (formData.service && settings?.services) {
+      const service = settings.services.find(s => s.id === formData.service);
+      setSelectedService(service);
+    }
+  }, [formData.service, settings?.services]);
 
   const fetchAvailableTimeSlots = async (date) => {
-    if (!date) return;
-    console.log(date)
+    if (!date || !settings) return;
+
     try {
-      //Uncomment when time data is live 
-      // const formattedDate = date.toISOString().split('T')[0];
-      // const response = await fetch(`/api/availability/get?date=${formattedDate}`);
-      // const slots = await response.json();
-      setAvailableTimeSlots(timeSlots);
+      const formattedDate = date.toISOString().split('T')[0];
+      const response = await fetchSettings(`availability-${formattedDate}`);
+
+      if (response) {
+        // Merge existing time slots with availability data
+        const updatedSlots = availableTimeSlots.map(slot => ({
+          ...slot,
+          available: !response.bookedSlots?.includes(slot.time)
+        }));
+        setAvailableTimeSlots(updatedSlots);
+      }
     } catch (error) {
-      console.error('Failed to fetch time slots:', error)
+      console.error('Failed to fetch time slots:', error);
     }
   };
+
+  // Filter out unavailable dates
+  const filterAvailableDates = (date) => {
+    if (!settings?.businessHours) return false;
+    const dayName = getDayName(date);
+    return settings.businessHours[dayName].isOpen;
+  };
+
 
   const validateSection1 = () => {
     const newErrors = {};
@@ -65,14 +148,13 @@ const Booking = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: null }));
     }
   };
 
   const handleDateChange = (date) => {
-    setFormData(prev => ({ ...prev, date }));
+    setFormData(prev => ({ ...prev, date, time: '' }));
     fetchAvailableTimeSlots(date);
     if (errors.date) {
       setErrors(prev => ({ ...prev, date: null }));
@@ -104,11 +186,8 @@ const Booking = () => {
         const result = await response.json();
 
         if (result.success) {
-          // Handle success (e.g., show success message, redirect)
-
           console.log('Appointment created:', result.appointmentId);
         } else {
-          // Handle error
           setErrors(prev => ({ ...prev, submit: result.error }));
         }
       } catch (error) {
@@ -117,6 +196,14 @@ const Booking = () => {
       }
     }
   };
+
+  if (loading) {
+    return <div className="text-center py-8">Loading booking form...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-8 text-red-500">Error loading booking settings. Please try again later.</div>;
+  }
 
   return (
     <section id="book-now" className="mt-20 pb-24 sm:pb-0">
@@ -230,8 +317,11 @@ const Booking = () => {
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.service ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">Select a service</option>
-                  <option value="single">Single Headlight - $30</option>
-                  <option value="double">Full Headlight - $60</option>
+                  {settings?.services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name} - ${service.price}
+                    </option>
+                  ))}
                 </select>
                 {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service}</p>}
               </div>
@@ -242,6 +332,7 @@ const Booking = () => {
                   onChange={handleDateChange}
                   dateFormat="MMMM d, yyyy"
                   minDate={new Date()}
+                  filterDate={filterAvailableDates}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
                 />
                 {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
@@ -267,6 +358,9 @@ const Booking = () => {
                   ))}
                 </select>
                 {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                {formData.date && availableTimeSlots.length === 0 && (
+                  <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
+                )}
               </div>
               <div>
                 <button type="submit" className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition duration-300">

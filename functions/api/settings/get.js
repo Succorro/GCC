@@ -11,13 +11,9 @@ export async function onRequest(context) {
 
   try {
     const { SETTINGS } = context.env;
-    
-    // Get the requested setting from query params
-    const url = new URL(context.request.url);
-    const settingKey = url.searchParams.get('key') || 'businessConfig';
 
     // Retrieve the settings
-    const settings = await SETTINGS.get(settingKey);
+    const settings = await SETTINGS.get('businessConfig');
     
     if (!settings) {
       return new Response(JSON.stringify({

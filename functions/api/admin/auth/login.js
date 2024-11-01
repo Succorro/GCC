@@ -95,7 +95,7 @@ export async function onRequestPost(context) {
     }
 
     // Parse request body
-    const body = await context.request.json();
+    // const body = await context.request.json();
     // let credentials;
     // try {
     //   credentials = JSON.stringify(body);
