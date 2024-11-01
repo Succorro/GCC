@@ -1,4 +1,4 @@
-const TimeSlotPicker = ({ onTimeSelect, selectedTime, time }) => {
+const TimeSlotPicker = ({ onTimeSelect, selectedTime, time, available }) => {
   const handleTimeClick = (time) => {
     onTimeSelect(time);
   };
@@ -7,6 +7,7 @@ const TimeSlotPicker = ({ onTimeSelect, selectedTime, time }) => {
     <button
       key={time}
       onClick={() => handleTimeClick(time)}
+      disabled={!available}
       className={`
             px-4 py-2 
             rounded-lg 

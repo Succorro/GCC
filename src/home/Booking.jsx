@@ -299,7 +299,7 @@ const Booking = () => {
                   onClick={handleBackwardClick}
                   className="text-black"
                 >
-                  <FaArrowLeft size={lg} />
+                  <FaArrowLeft size={'lg'} />
                 </button>
               </div>
               <div>
@@ -363,7 +363,7 @@ const Booking = () => {
                   // >
                   //   {slot.time} {!slot.available ? '(Unavailable)' : ''}
                   // </option>
-                  <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} />
+                  <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} selectedTime={formData.time} />
                 ))}
                 {/* </select> */}
                 {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
