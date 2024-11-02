@@ -10,6 +10,7 @@ const TimeSlotPicker = ({ onTimeSelect, selectedTime, time = '9:00', available }
       onClick={() => handleTimeClick(time)}
       disabled={!available}
       className={`
+            mx-4
             px-4 py-2 
             rounded-lg 
             text-sm 

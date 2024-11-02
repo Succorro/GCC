@@ -88,6 +88,7 @@ export async function onRequest(context) {
               appointment_id: appointmentData.id,
               date: appointmentData.date,
               time: appointmentData.time,
+              vehicle: appointmentData.vehicle,
               service: service.name,
               duration: appointmentData.duration,
               price: appointmentData.price,

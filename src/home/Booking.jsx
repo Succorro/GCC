@@ -4,6 +4,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useSettings } from '../admin/hooks/useSettings';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimeSlotPicker from '../components/TimeSlotPicker';
+import InfoHoverCard from '../components/InfoHoverCard'
 
 const Booking = () => {
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
@@ -127,9 +128,9 @@ const Booking = () => {
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
     if (formData.phone && !/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Invalid phone number';
+      newErrors.phone = 'Invalid phone number, e.g. 9991112222';
     }
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+    if (formData.email && !/^[A-Z0-9@._%+-]{6,254}$/.test(formData.email)) {
       newErrors.email = 'Invalid email address';
     }
     setErrors(newErrors);
@@ -255,7 +256,14 @@ const Booking = () => {
                 {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
               </div>
               <div>
-                <label htmlFor="email" className="block text-md font-semibold text-emerald-800 mb-2">Email <span className="text-sm text-gray-400">* Optional</span></label>
+                <label htmlFor="email" className="block text-md font-semibold text-emerald-800 mb-2">
+                  <p className='flex flex-col'>
+                    Email
+                    <InfoHoverCard
+                      content="While email is optional, providing it is required for warranty coverage. Your email serves as your receipt and warranty verification."
+                    />
+                  </p>
+                </label>
                 <input
                   type="email"
                   id="email"
@@ -299,7 +307,12 @@ const Booking = () => {
                 </button>
               </div>
               <div>
-                <label htmlFor="vehicle" className="block text-md font-semibold text-emerald-800 mb-2">Vehicle</label>
+                <label htmlFor="vehicle" className="block text-md font-semibold text-emerald-800 mb-2">
+                  Vehicle &nbsp;
+                  <InfoHoverCard
+                    content="Let us know what kind of car you're bringing in."
+                  />
+                </label>
                 <input
                   type="text"
                   id="vehicle"
