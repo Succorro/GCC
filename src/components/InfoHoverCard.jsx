@@ -1,53 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaInfoCircle } from "react-icons/fa";
 
 const InfoHoverCard = ({ content, position = 'top' }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const triggerRef = useRef(null);
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    if (isVisible && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const cardRect = cardRef.current?.getBoundingClientRect();
-
-      if (cardRect) {
-        const spacing = 8; // Gap between icon and card
-        let x = 0;
-        let y = 0;
-
-        switch (position) {
-          case 'top':
-            x = rect.left - (cardRect.width / 2) + (rect.width / 2);
-            y = rect.top - cardRect.height - spacing;
-            break;
-          case 'bottom':
-            x = rect.left - (cardRect.width / 2) + (rect.width / 2);
-            y = rect.bottom + spacing;
-            break;
-          case 'left':
-            x = rect.left - cardRect.width - spacing;
-            y = rect.top - (cardRect.height / 2) + (rect.height / 2);
-            break;
-          case 'right':
-            x = rect.right + spacing;
-            y = rect.top - (cardRect.height / 2) + (rect.height / 2);
-            break;
-          default:
-            x = rect.left - (cardRect.width / 2) + (rect.width / 2);
-            y = rect.top - cardRect.height - spacing;
-        }
-
-        setCoords({ x, y });
-      }
-    }
-  }, [isVisible, position]);
 
   return (
     <div className="inline-block relative">
       <div
-        ref={triggerRef}
         onMouseEnter={() => setIsVisible(true)}
         onMouseLeave={() => setIsVisible(false)}
         className="inline-flex items-center"
@@ -57,13 +16,14 @@ const InfoHoverCard = ({ content, position = 'top' }) => {
 
       {isVisible && (
         <div
-          ref={cardRef}
-          style={{
-            position: 'fixed',
-            left: `${coords.x}px`,
-            top: `${coords.y}px`,
-          }}
-          className="z-50 min-w-[200px] max-w-[280px] rounded-lg bg-white border border-gray-200 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
+          className={`absolute z-50 min-w-[200px] max-w-[280px] 
+            ${position === 'top' ? 'bottom-6' : ''}
+            ${position === 'bottom' ? 'top-6' : ''}
+            ${position === 'left' ? 'right-6' : ''}
+            ${position === 'right' ? 'left-6' : ''}
+            -translate-x-1/2 left-1/2
+            rounded-lg bg-white border border-gray-200 shadow-lg 
+            transition-opacity duration-200 opacity-100`}
           onMouseEnter={() => setIsVisible(true)}
           onMouseLeave={() => setIsVisible(false)}
         >

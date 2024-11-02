@@ -130,7 +130,7 @@ const Booking = () => {
     if (formData.phone && !/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
       newErrors.phone = 'Invalid phone number, e.g. 9991112222';
     }
-    if (formData.email && !/^[A-Z0-9@._%+-]{6,254}$/.test(formData.email)) {
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Invalid email address';
     }
     setErrors(newErrors);
@@ -257,12 +257,13 @@ const Booking = () => {
               </div>
               <div>
                 <label htmlFor="email" className="block text-md font-semibold text-emerald-800 mb-2">
-                  <p className='flex flex-col'>
+                  <div className="flex items-center gap-2">
                     Email
                     <InfoHoverCard
-                      content="While email is optional, providing it is required for warranty coverage. Your email serves as your receipt and warranty verification."
+                      content="While email is optional, it's required for warranty coverage. Your email serves as your receipt and warranty verification document."
+                      position="top"
                     />
-                  </p>
+                  </div>
                 </label>
                 <input
                   type="email"
