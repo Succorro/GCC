@@ -152,8 +152,8 @@ const Booking = () => {
     errors[name] && setErrors(prev => ({ ...prev, [name]: null }))
   };
   const handleTimeChange = (selectedTime) => {
-    setFormData(prev => ({ ...prev, [time]: selectedTime }));
-    errors.time && setErrors(prev => ({ ...prev, [time]: null }));
+    setFormData(prev => ({ ...prev, time: selectedTime }));
+    errors.time && setErrors(prev => ({ ...prev, time: null }));
   }
 
   const handleDateChange = (date) => {
