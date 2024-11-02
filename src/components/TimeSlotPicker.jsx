@@ -1,4 +1,4 @@
-const TimeSlotPicker = ({ onTimeSelect, selectedTime, time, available }) => {
+const TimeSlotPicker = ({ onTimeSelect, selectedTime, time = '9:00', available }) => {
   const handleTimeClick = (time) => {
     onTimeSelect(time);
   };
