@@ -30,9 +30,9 @@ export const AdminLayout = () => {
     );
   }
 
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/admin/login" state={{ from: location }} replace />;
-  // }
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

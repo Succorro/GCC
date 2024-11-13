@@ -43,7 +43,7 @@ const AppointmentsList = () => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
+  if (!appointments) return <div>Appointments Not Available</div>
   if (error) {
     return (
       <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -108,10 +108,10 @@ const AppointmentsList = () => {
                     </span>
                   </div>
                   <span className={`px-2 py-1 rounded-full text-sm ${appointment.status === 'confirmed'
-                      ? 'bg-green-100 text-green-800'
-                      : appointment.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
+                    ? 'bg-green-100 text-green-800'
+                    : appointment.status === 'pending'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-red-100 text-red-800'
                     }`}>
                     {appointment.status}
                   </span>
