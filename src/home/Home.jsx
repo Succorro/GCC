@@ -1,13 +1,15 @@
 import Booking from "./Booking";
 import Hero from "./Hero";
 import Pricing from "./Pricing";
+import Ready from "./Ready";
 import SlideShow from "./SlideShow";
 
 export const Home = () => (
-  <div className="pt-20 px-5 bg-indigo-50 w-[100vw]">
+  <div className="mt-16  w-[101vw]">
     <Hero />
     <SlideShow />
     <Pricing />
+    <Ready />
     <Booking />
   </div>
 );

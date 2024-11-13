@@ -3,12 +3,19 @@ import { FaBars, FaTimes, FaHome, FaImages, FaTag, FaCalendarCheck } from 'react
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hide, setHide] = useState(false)
   const [menuHeight, setMenuHeight] = useState(0);
   const menuRef = useRef(null);
   const navRef = useRef(null);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
+    if (hide === false) {
+      setHide(true)
+    } else if (hide === true) {
+      setTimeout(
+        setHide(false), 1000)
+    }
   }, []);
 
   useEffect(() => {
@@ -51,21 +58,21 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-indigo-50 fixed top-0 left-0 right-0 z-50 pb-2" ref={navRef}>
+    <nav className="bg-white fixed -top-1 -left-1 right-0 z-50 pb-0 w-[101vw]" ref={navRef}>
       <div className="max-w-6xl mx-auto px-2">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center w-20 h-20">
+        <div className="flex justify-between items-center ">
+          <div className="flex items-center justify-center w-24 h-24 overflow-hidden">
             <img
-              src="/GCCLogoBg.webp"
+              src="/Logo3.jpeg"
               alt="GCC Logo"
-              className="w-full h-full object-contain scale-150 pt-2"
+              className="w-full h-full transform object-contain"
             />
           </div>
 
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-emerald-700 p-2 rounded-md"
+              className="text-brand p-2 rounded-md"
               aria-expanded={isOpen}
               aria-label="Toggle menu"
             >
@@ -80,8 +87,8 @@ const Navigation = () => {
                 href={`#${item.id}`}
                 className='py-2 px-3 rounded-md transition duration-300 ease-in-out flex items-center'
               >
-                <item.icon className="mr-2 text-emerald-800" />
-                <span className='text-emerald-800 font-semibold'>
+                <item.icon className="mr-2 text-brand" />
+                <span className='text-brand font-semibold'>
                   {item.name}
                 </span>
               </a>
@@ -98,13 +105,13 @@ const Navigation = () => {
           transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease',
           opacity: isOpen ? 1 : 0,
         }}
-        className="md:hidden bg-indigo-50 shadow-md"
+        className="md:hidden bg-white shadow-md"
       >
-        {navItems.map((item, index) => (
+        {hide && navItems.map((item, index) => (
           <a
             key={item.id}
             href={`#${item.id}`}
-            className='block py-4 px-4 text-base font-medium hover:bg-emerald-800/[.1] hover:text-emerald-800 flex items-center transition duration-300 ease-in-out'
+            className='block py-4 px-4 text-base font-medium hover:bg-brand/[.1] hover:text-brand flex items-center transition duration-300 ease-in-out'
             onClick={toggleMenu}
             style={{
               transitionDelay: `${index * 50}ms`,
@@ -112,8 +119,8 @@ const Navigation = () => {
               opacity: isOpen ? 1 : 0,
             }}
           >
-            <item.icon className="mr-3 text-emerald-800" />
-            <span className='text-emerald-800 font-semibold'>
+            <item.icon className="mr-3 text-brand" />
+            <span className='text-brand font-semibold'>
               {item.name}
             </span>
           </a>
