@@ -95,7 +95,7 @@ export async function onRequestPost(context) {
     }
 
     // Parse request body
-    // const body = await context.request.json();
+    const body = await context.request.json();
     // let credentials;
     // try {
     //   credentials = JSON.stringify(body);
@@ -145,8 +145,7 @@ export async function onRequestPost(context) {
 
     // Verify credentials
     const isValidUsername = username === storedUsername;
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const isValidPassword = bcrypt.compare(hashedPassword, storedPasswordHash);
+    const isValidPassword = bcrypt.compare(password, storedPasswordHash);
 
     if (!isValidUsername || !isValidPassword) {
       // Handle failed attempt
