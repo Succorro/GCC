@@ -12,7 +12,6 @@ export const Home = () => {
   const handleBookingToggle = () => {
     setBookingIsOpen(prev => !prev)
   }
-  console.log(bookingIsOpen)
   return (
     <div className="mt-16 w-[101vw]">
       <Hero onBookingClick={handleBookingToggle} />

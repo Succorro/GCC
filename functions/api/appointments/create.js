@@ -42,7 +42,7 @@ export async function onRequest(context) {
       phone: body.phone,
       email: body.email,
       vehicle: body.vehicle,
-      service: body.service,
+      service: body.service.name,
       duration: `${body.service.duration}minutes`,
       price: body.service.price,
       date: appointmentDate.toISOString(),
@@ -58,12 +58,14 @@ export async function onRequest(context) {
 
     // Block the time slot
     const timeSlotKey = `${appointmentDate.toISOString().split('T')[0]}_${body.time}`;
-    await AVAILABILITY.put(timeSlotKey, "blocked");
+    await AVAILABILITY.put(timeSlotKey, JSON.stringify({
+      status: "blocked",
+      reason: `Appointment Scheduled: ${body.service.name}`,
+      updatedAt: new Date().toISOString()
+    }));
 
     // Send confirmation email via Brevo
     if (body.email) {
-      const service = config.services.find(s => s.id === body.service);
-      
       try {
         const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
           method: 'POST',
@@ -89,8 +91,8 @@ export async function onRequest(context) {
               date: appointmentData.date,
               time: appointmentData.time,
               vehicle: appointmentData.vehicle,
-              service: service.name,
-              duration: appointmentData.duration,
+              service: appointmentData.service,
+              servicetime: appointmentData.duration,
               price: appointmentData.price,
               address: appointmentData.address
             },

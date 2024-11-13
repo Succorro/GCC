@@ -3,6 +3,9 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 import { SettingsForm } from './SettingsForm';
+import AppointmentsList from './AppointmentsList';
+import CreateAppointment from './CreateAppointments';
+
 
 export const AdminLayout = () => {
   const { isAuthenticated, loading, user, logout } = useAuth();
@@ -35,7 +38,7 @@ export const AdminLayout = () => {
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between items-center mt-5 h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex flex-col items-start mt-1">
                 <h1 className="text-xl font-bold">Admin Dashboard</h1>
@@ -57,6 +60,8 @@ export const AdminLayout = () => {
         {errorMessage}
       </div>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <AppointmentsList />
+        <CreateAppointment />
         <SettingsForm />
       </main>
     </div>

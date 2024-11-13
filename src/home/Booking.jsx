@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
-import { FaArrowLeft, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaTimes, FaSpinner } from 'react-icons/fa';
 import { useSettings } from '../admin/hooks/useSettings';
+import { useAppointments } from '../admin/hooks/useAppointments'
 import 'react-datepicker/dist/react-datepicker.css';
 import TimeSlotPicker from '../components/TimeSlotPicker';
 import InfoHoverCard from '../components/InfoHoverCard'
@@ -21,6 +23,8 @@ const Booking = ({ onBookingClick, bookingIsOpen }) => {
   const [errors, setErrors] = useState({});
   const [firstSection, setFirstSection] = useState(true);
   const [selectedService, setSelectedService] = useState(null);
+  const navigate = useNavigate();
+  const { createAppointments, confirming, setConfirming } = useAppointments();
 
   const getDayName = (date) => {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -178,22 +182,10 @@ const Booking = ({ onBookingClick, bookingIsOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateSection2()) {
+      setConfirming(true)
       try {
-        const response = await fetch('/api/appointments/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          console.log('Appointment created:', result.appointmentId);
-        } else {
-          setErrors(prev => ({ ...prev, submit: result.error }));
-        }
+        await createAppointments(formData);
+        navigate("/confirmed", { replace: true });
       } catch (error) {
         console.error('Failed to create appointment:', error);
         setErrors(prev => ({ ...prev, submit: 'Failed to create appointment' }));
@@ -205,9 +197,19 @@ const Booking = ({ onBookingClick, bookingIsOpen }) => {
     return <div className="text-center py-8">Loading booking form...</div>;
   }
 
-  if (error) {
+  if (error && bookingIsOpen) {
     console.log(error)
-    return <div className="text-center py-8 text-red-500">Error loading booking settings. Please try again later.</div>;
+    return <div className="text-center bg-brand py-8 text-red-500">Error loading booking settings. Please try again later.</div>;
+  }
+
+  if (confirming) {
+    return (
+      <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
+        <div class="flex items-end gap-8">
+          <FaSpinner className="animate-spin text-brand" />
+        </div>
+      </div>
+    )
   }
 
   return (

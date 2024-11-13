@@ -78,18 +78,22 @@ export async function onRequest(context) {
                 email: updatedAppointment.email,
                 name: updatedAppointment.name
               }],
-              templateId: config.notifications.updateTemplateId,
+              templateId: config.notifications.confirmationTemplateId,
               params: {
                 name: updatedAppointment.name,
                 status: status,
                 appointment_id: appointmentId,
                 date: new Date(updatedAppointment.date).toLocaleDateString(),
-                time: updatedAppointment.time
+                time: updatedAppointment.time,
+                vehicle: updatedAppointment.vehicle,
+                service: updatedAppointment.service,
+                servicetime: updatedAppointment.duration,
+                price: updatedAppointment.price,
+                address: updatedAppointment.address
               }
             })
           });
         }
-        
         return new Response(JSON.stringify({
           success: true,
           message: "Appointment updated"

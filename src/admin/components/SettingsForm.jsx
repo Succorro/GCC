@@ -143,18 +143,22 @@ export const SettingsForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <h1 className='text-3xl font-bold font-serif text-brand m-4'>Business Settings</h1>
       <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <h3 className="text-lg font-medium leading-6 text-slate-900">
               Business Hours
             </h3>
+            <p className="mt-1 text-sm text-slate-500">
+              Update availability
+            </p>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             {Object.entries(formData.businessHours).map(([day, hours]) => (
               <div key={day} className="grid grid-cols-6 gap-4 mb-4">
                 <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 capitalize">
+                  <label className="block text-sm font-medium text-slate-700 capitalize">
                     {day}
                   </label>
                 </div>
@@ -163,9 +167,9 @@ export const SettingsForm = () => {
                     type="checkbox"
                     checked={hours.isOpen}
                     onChange={(e) => handleDayChange(day, 'isOpen', e.target.checked)}
-                    className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                    className="focus:ring-teal-500 h-4 w-4 text-teal-600 border-slate-300 rounded"
                   />
-                  <span className="ml-2 text-sm text-gray-600">Open</span>
+                  <span className="ml-2 text-sm text-slate-600">Open</span>
                 </div>
                 {hours.isOpen && (
                   <div className="col-span-3">
@@ -174,13 +178,13 @@ export const SettingsForm = () => {
                         type="time"
                         value={hours.start}
                         onChange={(e) => handleDayChange(day, 'start', e.target.value)}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="mt-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                       />
                       <input
                         type="time"
                         value={hours.end}
                         onChange={(e) => handleDayChange(day, 'end', e.target.value)}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="mt-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                       />
                     </div>
                   </div>
@@ -194,15 +198,15 @@ export const SettingsForm = () => {
       <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <h3 className="text-lg font-medium leading-6 text-slate-900">
               Services
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-slate-500">
               Add and manage your services
             </p>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
-            <div className="grid grid-cols-12 gap-4 mb-4 font-medium text-sm text-gray-700">
+            <div className="grid grid-cols-12 gap-4 mb-4 font-medium text-sm text-slate-700">
               <div className="col-span-4">Name</div>
               <div className="col-span-3">Price ($)</div>
               <div className="col-span-3">Duration (min)</div>
@@ -216,7 +220,7 @@ export const SettingsForm = () => {
                     value={service.name}
                     onChange={(e) => handleServiceChange(index, 'name', e.target.value)}
                     placeholder="Service name"
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   />
                 </div>
                 <div className="col-span-3">
@@ -226,7 +230,7 @@ export const SettingsForm = () => {
                     onChange={(e) => handleServiceChange(index, 'price', e.target.value)}
                     min="0"
                     placeholder="Price"
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   />
                 </div>
                 <div className="col-span-3">
@@ -236,7 +240,7 @@ export const SettingsForm = () => {
                     onChange={(e) => handleServiceChange(index, 'duration', e.target.value)}
                     min="1"
                     placeholder="Duration"
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   />
                 </div>
                 <div className="col-span-2 flex items-center">
@@ -254,7 +258,7 @@ export const SettingsForm = () => {
               <button
                 type="button"
                 onClick={handleAddNew}
-                className="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
               >
                 <Plus size={20} className="mr-2" />
                 Add Service
@@ -265,9 +269,9 @@ export const SettingsForm = () => {
       </div>
 
       {status && (
-        <div className={`rounded-md p-4 ${status.includes('success') ? 'bg-green-50' : 'bg-red-50'
+        <div className={`rounded-md p-4 ${status.includes('success') ? 'bg-teal-50' : 'bg-red-50'
           }`}>
-          <div className={`text-sm ${status.includes('success') ? 'text-green-700' : 'text-red-700'
+          <div className={`text-sm ${status.includes('success') ? 'text-teal-700' : 'text-red-700'
             }`}>
             {status}
           </div>
@@ -277,9 +281,9 @@ export const SettingsForm = () => {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brand hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
         >
-          Save Changes
+          Save Settings
         </button>
       </div>
     </form>
