@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Hero = () => {
+const Hero = ({ onBookingClick }) => {
   return (
     <section id="home" className="pb-20 p-5 bg-brand">
       <div className="max-w-6xl mx-auto mt-10">
@@ -14,9 +14,7 @@ const Hero = () => {
             </p>
           </div>
           <div className='flex justify-center pb-5'>
-            <a href="/#over-booking">
-              <button className='bg-teal-700 hover:bg-teal-900 py-4 px-8 rounded-lg text-white text-xl font-semibold tracking-wider'>Reserve</button>
-            </a>
+            <button onClick={() => onBookingClick()} className='bg-teal-700 hover:bg-teal-900 py-4 px-8 rounded-lg text-white text-xl font-semibold tracking-wider'>Reserve</button>
           </div>
           <div>
             <h2 className="text-2xl font-semibold text-white mb-4">Our Commitment to You</h2>

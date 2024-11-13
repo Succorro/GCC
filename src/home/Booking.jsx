@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaTimes } from 'react-icons/fa';
 import { useSettings } from '../admin/hooks/useSettings';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimeSlotPicker from '../components/TimeSlotPicker';
 import InfoHoverCard from '../components/InfoHoverCard'
 
-const Booking = () => {
+const Booking = ({ onBookingClick, bookingIsOpen }) => {
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
   const { settings, loading, error, fetchSettings } = useSettings();
   const [formData, setFormData] = useState({
@@ -211,172 +211,242 @@ const Booking = () => {
   }
 
   return (
-    <section id="book-now" className="mt-20 pb-24 sm:pb-0">
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-emerald-700 text-center">Book Your Appointment</h2>
-        <div className="p-6">
-          <form onSubmit={handleSubmit} className="flex flex-row">
-            <section
-              id="Section1"
-              className="space-y-6"
-              style={{
-                width: firstSection ? '100%' : '0%',
-                paddingLeft: firstSection ? '10px' : '0',
-                opacity: firstSection ? 1 : 0,
-                transform: firstSection ? 'translateX(-20px)' : 'translateX(0)',
-                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              <div>
-                <label htmlFor="name" className="block text-md font-semibold text-emerald-800 mb-2">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  autoComplete="on"
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-md font-semibold text-emerald-800 mb-2">Phone</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  autoComplete="on"
-                  required
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-md font-semibold text-emerald-800 mb-2">
-                  <div className="flex items-center gap-2">
-                    Email
-                    <InfoHoverCard
-                      content="While email is optional, it's required for warranty coverage. Your email serves as your receipt and warranty verification document."
-                      position="top"
-                    />
-                  </div>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  autoComplete="on"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-              </div>
-              <div>
-                <button
-                  type="button"
-                  onClick={handleForwardClick}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
-                >
-                  Next
-                </button>
-              </div>
-            </section>
-            <section
-              id="Section2"
-              className="space-y-6"
-              style={{
-                width: firstSection ? '0%' : '100%',
-                position: 'relative',
-                left: firstSection ? '0' : '-30px',
-                opacity: firstSection ? 0 : 1,
-                transform: firstSection ? 'translateX(0px)' : 'translateX(20px)',
-                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              <div>
-                <button
-                  type="button"
-                  onClick={handleBackwardClick}
-                  className="text-black"
-                >
-                  <FaArrowLeft />
-                </button>
-              </div>
-              <div>
-                <label htmlFor="vehicle" className="block text-md font-semibold text-emerald-800 mb-2">
-                  Vehicle &nbsp;
-                  <InfoHoverCard
-                    content="Let us know what kind of car you're bringing in."
-                  />
-                </label>
-                <input
-                  type="text"
-                  id="vehicle"
-                  name="vehicle"
-                  autoComplete="off"
-                  value={formData.vehicle}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.vehicle ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.vehicle && <p className="text-red-500 text-sm mt-1">{errors.vehicle}</p>}
-              </div>
-              <div>
-                <label htmlFor="service" className="block text-md font-semibold text-emerald-800 mb-2">Service</label>
-                <select
-                  id="service"
-                  name="service"
-                  value={formData.service}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.service ? 'border-red-500' : 'border-gray-300'}`}
-                >
-                  <option value="">Select a service</option>
-                  {settings?.services.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.name} - ${service.price}
-                    </option>
-                  ))}
-                </select>
-                {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service}</p>}
-              </div>
-              <div>
-                <label htmlFor="date" className="block text-md font-semibold text-emerald-800 mb-2">Date</label>
-                <DatePicker
-                  selected={formData.date}
-                  onChange={handleDateChange}
-                  dateFormat="MMMM d, yyyy"
-                  minDate={new Date()}
-                  filterDate={filterAvailableDates}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
-              </div>
-              {formData.date &&
-                <div>
-                  <label htmlFor="time" className="block text-md font-semibold text-emerald-800 mb-2">Time</label>
-                  {availableTimeSlots.map((slot) => (
-                    <TimeSlotPicker time={slot.time} available={slot.available} onTimeSelect={handleTimeChange} selectedTime={formData.time} />
-                  ))}
-                  {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
-                  {formData.date && availableTimeSlots.length === 0 && (
-                    <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
-                  )}
+    <>
+      {bookingIsOpen &&
+        <div className="fixed inset-0 w-screen h-screen z-50 bg-white overflow-y-auto">
+          <div className="min-h-screen py-8">
+            {/* Header Section */}
+            <div className="max-w-4xl mx-auto px-4 relative">
+              <button
+                type="button"
+                onClick={onBookingClick}
+                className="absolute right-2 -top-5 p-2 hover:bg-teal-800 rounded-full transition-colors"
+              >
+                <FaTimes className="text-3xl text-brand" />
+              </button>
+
+              <h2 className="text-4xl font-bold text-teal-800 text-center">
+                Book Your Appointment
+              </h2>
+
+              {/* Main Form Card */}
+              <div className="bg-white">
+                <div className="p-8">
+                  <form onSubmit={handleSubmit} className="flex flex-row relative overflow-hidden">
+                    {/* Section 1 */}
+                    <section
+                      className="space-y-6 w-full transition-all duration-500 ease-in-out"
+                      style={{
+                        width: firstSection ? '100%' : '0%',
+                        opacity: firstSection ? 1 : 0,
+                        transform: firstSection ? 'translateX(0)' : 'translateX(-100%)',
+                      }}
+                    >
+                      <div className="space-y-6">
+                        {/* Name Input */}
+                        <div>
+                          <label htmlFor="name" className="block text-lg font-medium text-teal-800 mb-2">
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            autoComplete="on"
+                            required
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                            ${errors.name ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                            placeholder="Enter your full name"
+                          />
+                          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                        </div>
+
+                        {/* Phone Input */}
+                        <div>
+                          <label htmlFor="phone" className="block text-lg font-medium text-teal-800 mb-2">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            autoComplete="on"
+                            required
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                            ${errors.phone ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                            placeholder="Enter your phone number"
+                          />
+                          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                        </div>
+
+                        {/* Email Input */}
+                        <div>
+                          <label htmlFor="email" className="block text-lg font-medium text-teal-800 mb-2">
+                            <div className="flex items-center gap-2">
+                              Email Address
+                              <InfoHoverCard
+                                content="While email is optional, it's required for warranty coverage. Your email serves as your receipt and warranty verification document."
+                                position="top"
+                              />
+                            </div>
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autoComplete="on"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                            ${errors.email ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                            placeholder="Enter your email address"
+                          />
+                          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                        </div>
+
+                        {/* Next Button */}
+                        <button
+                          type="button"
+                          onClick={handleForwardClick}
+                          className="w-full bg-brand text-white py-3 px-6 rounded-lg font-semibold 
+                          hover:bg-teal-700 active:bg-teal-800 transition-colors duration-200
+                          shadow-lg hover:shadow-xl"
+                        >
+                          Continue to Details
+                        </button>
+                      </div>
+                    </section>
+
+                    {/* Section 2 */}
+                    <section
+                      className="space-y-6 w-full transition-all duration-500 ease-in-out"
+                      style={{
+                        width: firstSection ? '0%' : '100%',
+                        opacity: firstSection ? 0 : 1,
+                        transform: firstSection ? 'translateX(100%)' : 'translateX(0)',
+                      }}
+                    >
+                      {/* Back Button */}
+                      <button
+                        type="button"
+                        onClick={handleBackwardClick}
+                        className="flex items-center gap-2 text-teal-800 hover:text-teal-700 font-medium mb-6 pt-1"
+                      >
+                        <FaArrowLeft className="text-lg" />
+                        <span>Back to Contact Info</span>
+                      </button>
+
+                      {/* Vehicle Input */}
+                      <div>
+                        <label htmlFor="vehicle" className="block text-lg font-medium text-teal-800 mb-2 pr-5">
+                          <div className="flex items-center gap-2">
+                            Vehicle Details
+                            <InfoHoverCard
+                              className=""
+                              content="Let us know what kind of car you're bringing in."
+                            />
+                          </div>
+                        </label>
+                        <input
+                          type="text"
+                          id="vehicle"
+                          name="vehicle"
+                          autoComplete="off"
+                          value={formData.vehicle}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                          ${errors.vehicle ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                          placeholder="e.g., 2019 Toyota Camry"
+                        />
+                        {errors.vehicle && <p className="text-red-500 text-sm mt-1">{errors.vehicle}</p>}
+                      </div>
+
+                      {/* Service Selection */}
+                      <div>
+                        <label htmlFor="service" className="block text-lg font-medium text-teal-800 mb-2">
+                          Select Service
+                        </label>
+                        <select
+                          id="service"
+                          name="service"
+                          value={formData.service}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                          ${errors.service ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                        >
+                          <option value="">Choose a service...</option>
+                          {settings?.services.map((service) => (
+                            <option key={service.id} value={service.id}>
+                              {service.name} - ${service.price}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service}</p>}
+                      </div>
+
+                      {/* Date Picker */}
+                      <div>
+                        <label htmlFor="date" className="block text-lg font-medium text-teal-800 mb-2">
+                          Preferred Date
+                        </label>
+                        <DatePicker
+                          selected={formData.date}
+                          onChange={handleDateChange}
+                          dateFormat="MMMM d, yyyy"
+                          minDate={new Date()}
+                          filterDate={filterAvailableDates}
+                          className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-800 focus:border-transparent transition-colors
+                          ${errors.date ? 'border-red-300 bg-red-50' : 'border-teal-800 bg-white'}`}
+                        />
+                        {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
+                      </div>
+
+                      {/* Time Slots */}
+                      {formData.date && (
+                        <div>
+                          <label className="block text-lg font-medium text-teal-800 mb-4">
+                            Available Time Slots
+                          </label>
+                          <div className="grid grid-cols-3 gap-3">
+                            {availableTimeSlots.map((slot) => (
+                              <TimeSlotPicker
+                                key={slot.time}
+                                time={slot.time}
+                                available={slot.available}
+                                onTimeSelect={handleTimeChange}
+                                selectedTime={formData.time}
+                              />
+                            ))}
+                          </div>
+                          {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                          {formData.date && availableTimeSlots.length === 0 && (
+                            <p className="text-red-500 text-sm mt-1">No available time slots for this date</p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Submit Button */}
+                      <button
+                        type="submit"
+                        className="w-full bg-teal-700 text-white py-3 px-6 rounded-lg font-semibold 
+                        hover:bg-teal-700 active:bg-teal-800 transition-colors duration-200
+                        shadow-lg hover:shadow-xl mt-6"
+                      >
+                        Confirm Booking
+                      </button>
+                    </section>
+                  </form>
                 </div>
-              }
-              <div>
-                <button type="submit" className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition duration-300">
-                  Book Appointment
-                </button>
               </div>
-            </section>
-          </form>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      }
+    </>
   );
 };
 

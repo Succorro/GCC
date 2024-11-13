@@ -25,17 +25,69 @@ export const useSettings = () => {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch('/api/settings/get');
+      // const response = await fetch('/api/settings/get');
       
-      if (!response.ok) {
-        if (response.status === 404) {
-          // If settings don't exist, trigger initial configuration
-          return await configureSettings();
+      // if (!response.ok) {
+      //   if (response.status === 404) {
+      //     // If settings don't exist, trigger initial configuration
+      //     return await configureSettings();
+      //   }
+      //   throw new Error('Failed to fetch settings');
+      // }
+      
+      // const data = await response.json();
+      const data = {
+        businessHours: {
+          monday: { 
+            isOpen: false 
+          },
+          tuesday: { 
+            start: '08:00', 
+            end: '12:00', 
+            breakStart: '12:00',
+            breakEnd: '15:00',
+            secondStart: '15:00',
+            secondEnd: '18:00',
+            isOpen: true 
+          },
+          wednesday: { 
+            start: '08:00', 
+            end: '12:00',
+            breakStart: '12:00',
+            breakEnd: '15:00',
+            secondStart: '15:00',
+            secondEnd: '18:00',
+            isOpen: true 
+          },
+          thursday: { 
+            isOpen: false 
+          },
+          friday: { 
+            isOpen: false 
+          },
+          saturday: { 
+            start: '10:00', 
+            end: '16:00', 
+            isOpen: true 
+          },
+          sunday: { 
+            start: '10:00', 
+            end: '16:00', 
+            isOpen: true 
+          }
+        },
+        appointmentDuration: 30,
+        bufferTime: 0,
+        services: [
+          { id: 'single', name: 'Single Headlight', duration: 30, price: 30 },
+          { id: 'double', name: 'Full Headlight', duration: 60, price: 60 }
+        ],
+        notifications: {
+          confirmationTemplateId: 2,
+          senderEmail: "quote@gabrielcarcleaning.com",
+          senderName: "Gabriel Car Cleaning"
         }
-        throw new Error('Failed to fetch settings');
-      }
-      
-      const data = await response.json();
+      };
       setSettings(data);
     } catch (err) {
       setError(err.message);

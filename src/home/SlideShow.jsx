@@ -56,7 +56,7 @@ const Slideshow = () => {
   };
 
   return (
-    <section className="mt-64">
+    <section id='gallery' className="mt-64">
       <div className="max-w-4xl mx-auto">
         <div className='flex ml-7 justify-start' >
           <FaCar className='text-3xl text-teal-800 w-10 mr-2 mt-1' />
