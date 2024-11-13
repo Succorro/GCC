@@ -145,7 +145,8 @@ export async function onRequestPost(context) {
 
     // Verify credentials
     const isValidUsername = username === storedUsername;
-    const isValidPassword = await bcrypt.compare(password, storedPasswordHash);
+    const hashedPassword = bcrypt.hash(password)
+    const isValidPassword = bcrypt.compare(hashedPassword, storedPasswordHash);
 
     if (!isValidUsername || !isValidPassword) {
       // Handle failed attempt
