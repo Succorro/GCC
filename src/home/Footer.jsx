@@ -17,7 +17,6 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Navigation Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -36,9 +35,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Hours</h3>
             <ul className="space-y-2">
-              <li>Monday - Friday: 9AM - 6PM</li>
+              <li>Monday: CLOSED</li>
+              <li>Tuesday-Wednesday: 8AM - 6PM</li>
+              <li>Thursday-Friday: CLOSED</li>
               <li>Saturday: 10AM - 4PM</li>
-              <li>Sunday: Closed</li>
+              <li>Sunday: 10AM - 4PM</li>
             </ul>
           </div>
 
@@ -47,17 +48,16 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <ul className="space-y-2">
               <li>
-                <a href="tel:+1234567890" className="hover:text-emerald-200 transition-colors duration-200">
-                  (123) 456-7890
+                <a href="tel:+12093384972" className="hover:text-emerald-200 transition-colors duration-200">
+                  (209) 338-4972
                 </a>
               </li>
               <li>
-                <a href="mailto:info@example.com" className="hover:text-emerald-200 transition-colors duration-200">
-                  info@example.com
+                <a href="mailto:support@gabrielcarcleaning.com" className="hover:text-emerald-200 transition-colors duration-200">
+                  support@gabrielcarcleaning.com
                 </a>
               </li>
-              <li>123 Main Street</li>
-              <li>City, State 12345</li>
+              <li>Modesto, CA 95355</li>
             </ul>
           </div>
 
@@ -65,7 +65,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a
+              {/* <a
                 href="#"
                 className="hover:text-emerald-200 transition-colors duration-200"
                 aria-label="Facebook"
@@ -81,9 +81,9 @@ const Footer = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              </a>
+              </a> */}
               <a
-                href="#"
+                href="https://www.instagram.com/polishn_dee"
                 className="hover:text-emerald-200 transition-colors duration-200"
                 aria-label="Instagram"
               >
@@ -99,7 +99,7 @@ const Footer = () => {
                   />
                 </svg>
               </a>
-              <a
+              {/* <a
                 href="#"
                 className="hover:text-emerald-200 transition-colors duration-200"
                 aria-label="Twitter"
@@ -111,7 +111,7 @@ const Footer = () => {
                 >
                   <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                 </svg>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8">
           <p className="text-center text-sm">
-            © {currentYear} Your Company Name. All rights reserved.
+            © {currentYear} Gabriel Car Cleaning. All rights reserved.
           </p>
         </div>
       </div>

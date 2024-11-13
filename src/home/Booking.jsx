@@ -213,19 +213,19 @@ const Booking = ({ onBookingClick, bookingIsOpen }) => {
   return (
     <>
       {bookingIsOpen &&
-        <div className="fixed inset-0 w-screen h-screen z-50 bg-white overflow-y-auto">
+        <div className="fixed inset-0 w-screen min:h-screen z-50 bg-white overflow-y-auto">
           <div className="min-h-screen py-8">
             {/* Header Section */}
             <div className="max-w-4xl mx-auto px-4 relative">
               <button
                 type="button"
                 onClick={onBookingClick}
-                className="absolute right-2 -top-5 p-2 hover:bg-teal-800 rounded-full transition-colors"
+                className="absolute right-2 -top-5 p-2 hover:bg-teal-800 text-brand hover:text-white rounded-full transition-colors"
               >
-                <FaTimes className="text-3xl text-brand" />
+                <FaTimes className="text-3xl " />
               </button>
 
-              <h2 className="text-4xl font-bold text-teal-800 text-center">
+              <h2 className="text-4xl font-bold text-teal-800 text-center pt-10">
                 Book Your Appointment
               </h2>
 
