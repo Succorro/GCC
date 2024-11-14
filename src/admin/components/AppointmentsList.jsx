@@ -62,9 +62,11 @@ const AppointmentsList = () => {
 
   return (
     <div className="p-4">
-      <div className="flex flex-col justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold font-serif text-gray-900">Appointments</h1>
-        <div className="flex gap-4">
+      <div className="flex flex-col justify-center items-center mb-6">
+        <h1 className='text-3xl font-bold font-serif text-brand m-4'>
+          Appointments
+        </h1>
+        <div className="flex justify-center gap-4">
           <select
             className="px-3 py-2 border rounded-lg"
             value={sortField}
