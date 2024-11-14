@@ -11,7 +11,7 @@ import Navigation from '../Navigation.jsx'
 export const Router = () => (
   <Routes>
     <Route path={RoutePaths.LOGIN} element={<LoginForm />} />
-    <Route path='/devAdmin' element={<AdminLayout />} />
+    <Route path='/devadmin' element={<AdminLayout />} />
     <Route
       path={RoutePaths.ADMIN}
       element={
