@@ -30,9 +30,9 @@ export const AdminLayout = () => {
     );
   }
 
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/admin/login" state={{ from: location }} replace />;
-  // }
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -42,7 +42,7 @@ export const AdminLayout = () => {
             <div className="flex">
               <div className="flex-shrink-0 flex flex-col items-start mt-1">
                 <h1 className="text-xl font-bold">Admin Dashboard</h1>
-                <h1 className="text-xl ">Welcome {user}</h1>
+                <h1 className="text-xl ">Welcome {user?.username}</h1>
               </div>
             </div>
             <div>
