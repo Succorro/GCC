@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { LoginForm } from "../admin/components/LoginForm.jsx";
+import { LoginForm } from "../admin/pages/LoginForm.jsx";
 import { RoutePaths } from "./RoutePaths.jsx";
 import { Home } from "../home/Home.jsx";
 import { NotFound } from "./NotFound.jsx";
@@ -11,6 +11,7 @@ import Navigation from '../Navigation.jsx'
 export const Router = () => (
   <Routes>
     <Route path={RoutePaths.LOGIN} element={<LoginForm />} />
+    <Route path='/devadmin' element={<AdminLayout />} />
     <Route
       path={RoutePaths.ADMIN}
       element={

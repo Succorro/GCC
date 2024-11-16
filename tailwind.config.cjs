@@ -9,6 +9,7 @@ module.exports = {
       'brand': "#012d33",
       'emerald-800': '#065f46',
       'white': '#ffffff',
+      'black': '#000000',
       'teal': {
         50 : '#f0fdfa',
         100: '#ccfbf1',
