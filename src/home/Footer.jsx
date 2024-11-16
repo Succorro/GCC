@@ -5,7 +5,7 @@ const Footer = () => {
     { name: 'Home', href: '#home' },
     { name: 'Gallery', href: '#gallery' },
     { name: 'Pricing', href: '#pricing' },
-    { name: 'Book Now', href: '#over-booking' },
+    { name: 'Reserve', href: '#over-booking' },
   ];
 
   const currentYear = new Date().getFullYear();

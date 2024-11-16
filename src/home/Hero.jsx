@@ -3,7 +3,7 @@ import React from 'react';
 const Hero = ({ onBookingClick }) => {
   return (
     <section id="home" className="pb-20 p-5 bg-brand">
-      <div className="max-w-6xl mx-auto mt-10">
+      <div className=" mx-auto mt-10">
         <h3 className="text-4xl font-medium font-serif text-white mb-6 text-center leading-normal">With Every Detail Customer Satisfaction is Our Aim</h3>
         <div className="grid gap-8">
           <div className='px-5 pt-5'>
@@ -41,9 +41,9 @@ const Hero = ({ onBookingClick }) => {
         <div className="absolute left-1/2 top-16 -translate-x-1/2 -translate-y-10 flex items-center justify-center">
           {/* Image container - centered over triangle */}
           <div className="relative z-10">
-            <div className="w-[70vw] h-[50vw] shadow-lg">
+            <div className="w-[70vw] h-[50vw] shadow-lg md:w-[50vw] md:h-[30vw]">
               <img
-                src="/GCCHeadlightRemoved.JPG"
+                src="/GabrielCarCleaning.jpeg"
                 alt="Gabriel showcase image"
                 className="w-full h-full object-cover"
               />
@@ -52,7 +52,7 @@ const Hero = ({ onBookingClick }) => {
         </div>
 
         {/* Spacer to maintain height */}
-        <div className="h-32" />
+        <div className="h-32 md:h-52" />
       </div>
     </section>
   );

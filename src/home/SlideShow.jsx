@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaCar } from "react-icons/fa";
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from 'react-icons/io'
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -37,6 +38,25 @@ const Slideshow = () => {
       text: 'Combo Lights'
     },
   ]
+
+  const CustomArrow = ({ direction, onClick }) => {
+    return (
+      <button
+        onClick={onClick}
+        className={`absolute z-10 top-1/2 -translate-y-1/2 
+          ${direction === 'prev' ? 'left-2' : 'right-2'}
+          text-white hover:text-white/80 transition-colors
+          text-4xl cursor-pointer`}
+        aria-label={`${direction === 'prev' ? 'Previous' : 'Next'} slide`}
+      >
+        {direction === 'prev' ?
+          <IoIosArrowDropleftCircle /> :
+          <IoIosArrowDroprightCircle />
+        }
+      </button>
+    );
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -45,33 +65,33 @@ const Slideshow = () => {
     slidesToScroll: 1,
     autoplay: false,
     autoplaySpeed: 3000,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-        }
-      }
-    ]
+    nextArrow: <CustomArrow direction="next" />,
+    prevArrow: <CustomArrow direction="prev" />,
+    dotsClass: "slick-dots bottom-4",
   };
-
   return (
     <section id='gallery' className="mt-64">
-      <div className="max-w-4xl mx-auto">
-        <div className='flex ml-7 justify-start' >
+      <div className="flex flex-col md:items-center mx-auto">
+        <div className='flex ml-8 items-start w-full md:ml-24' >
           <FaCar className='text-3xl text-teal-800 w-10 mr-2 mt-1' />
           <h2 className="text-3xl font-semibold text-teal-800 mb-8 text-center">Our Work</h2>
         </div>
-        <div className="max-w-3xl mx-auto">
-          <Slider {...settings}>
-            {imageData.map((image) => {
-              return (
-                <div key={image.id} className="px-5 w-[70vw] h-[70vw]">
-                  <img src={image.imageUrl} alt={image.text} className="w-full sm:h-96 object-cover object-center rounded-lg" />
+        <div className="relative w-full max-w-6xl mx-auto px-4 md:px-8">
+          <div className="aspect-[4/3] md:aspect-[16/9]">
+            <Slider {...settings} className="h-full md:mx-10">
+              {imageData.map((image) => (
+                <div key={image.id} className="outline-none px-1">
+                  <div className="aspect-[4/3] md:aspect-[16/9]">
+                    <img
+                      src={image.imageUrl}
+                      alt={image.text}
+                      className="w-full h-full object-cover object-center rounded-lg"
+                    />
+                  </div>
                 </div>
-              )
-            })}
-          </Slider>
+              ))}
+            </Slider>
+          </div>
         </div>
       </div>
     </section>
